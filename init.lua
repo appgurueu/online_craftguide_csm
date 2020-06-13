@@ -32,7 +32,13 @@ function render(per_step)
     local itemdefs = minetest.get_item_defs()
     itemdefs[""] = nil
     local total = 0
-    for _ in pairs(itemdefs) do total = total + 1 end
+    for name, def in pairs(itemdefs) do
+        if not def.description or (def.groups.not_in_creative_inventory or 0) > 0 then
+            itemdefs[name] = nil
+        else
+            total = total + 1
+        end
+    end
     local done = 0
     minetest.register_globalstep(function()
         for name, def in pairs(itemdefs) do
