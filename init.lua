@@ -31,7 +31,7 @@ function render(per_step)
     }
     local itemdefs = minetest.get_item_defs()
     itemdefs[""] = nil
-    local total = 0
+    local total = 2
     for name, def in pairs(itemdefs) do
         if not def.description or (def.groups.not_in_creative_inventory or 0) > 0 then
             itemdefs[name] = nil
@@ -39,7 +39,13 @@ function render(per_step)
             total = total + 1
         end
     end
-    local done = 0
+    if not minetest.store_texture("wieldhand.png", "images/wieldhand.png") then
+        minetest.log("Storing wieldhand texture failed")
+    end
+    if not minetest.store_texture("unknown_item.png", "images/unknown_item.png") then
+        minetest.log("Storing unknown item texture failed")
+    end
+    local done = 2
     minetest.register_globalstep(function()
         for name, def in pairs(itemdefs) do
             if not minetest.store_texture("[item:"..def.name, "images/"..name:gsub("%:", "_")..".png") then
